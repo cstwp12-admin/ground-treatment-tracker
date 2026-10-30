@@ -1,6 +1,6 @@
 # Publish a test link
 
-This folder is prepared for a NEW repository. It has not been uploaded, and no site has been published by its preparation tools. Do not copy the original private development folder or Git history.
+The reviewed test-release sources have been uploaded to this repository. Uploading source files does not deploy the website: Pages configuration and an explicit deployment run are still required. Do not add the original private development folder or Git history.
 
 1. Create a new GitHub repository under your account and upload/commit only this folder's contents, preserving hidden `.github/` and `.gitignore`. Use `main` as the default branch. Do not add private datasets or the developer pilot archives.
 2. In repository **Settings → Pages**, select **GitHub Actions** as the publishing source.
