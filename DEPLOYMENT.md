@@ -1,6 +1,8 @@
 # Publish a test link
 
-The reviewed test-release sources have been uploaded to this repository. Uploading source files does not deploy the website: Pages configuration and an explicit deployment run are still required. Do not add the original private development folder or Git history.
+The test release is live at https://cstwp12-admin.github.io/ground-treatment-tracker/ after successful manual deployment on 30 October 2026. [Deployment run](https://github.com/cstwp12-admin/ground-treatment-tracker/actions/runs/40995110485). The live runtime assets matched the reviewed release hashes and the hosted setup/theme/offline-installation controls were checked. Actual team operation and production acceptance remain pending.
+
+For future releases, uploading source alone does not deploy the website: explicitly run the deployment workflow after verification. Do not add the original private development folder or Git history.
 
 1. Create a new GitHub repository under your account and upload/commit only this folder's contents, preserving hidden `.github/` and `.gitignore`. Use `main` as the default branch. Do not add private datasets or the developer pilot archives.
 2. In repository **Settings → Pages**, select **GitHub Actions** as the publishing source.

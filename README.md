@@ -2,7 +2,9 @@
 
 A browser-based tracker for local progress entry, controlled review and formatted report exports. **Team pilot pending; not yet accepted for production.**
 
-Open the published GitHub Pages link once it has been deployed. End users do not install Node.js, run a terminal or create a database. Project data stays in the browser profile and is exchanged using encrypted files; devices do not synchronize automatically.
+**Test site:** https://cstwp12-admin.github.io/ground-treatment-tracker/
+
+Deployed 30 October 2026; actual team pilot and production acceptance are still pending. Open the link in your browser. End users do not install Node.js, run a terminal or create a database. Project data stays in the browser profile and is exchanged using encrypted files; devices do not synchronize automatically.
 
 - [User guide](USER_GUIDE.md)
 - [What the team pilot must prove](PILOT_CHECKLIST.md)
