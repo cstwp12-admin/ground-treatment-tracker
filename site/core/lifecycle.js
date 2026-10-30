@@ -1,0 +1,16 @@
+(function(root){
+ 'use strict';
+ const MiB=1024*1024,POLICY=Object.freeze({version:1,warningBytes:24*MiB,workspaceBytes:32*MiB,photoBytes:2*MiB,sourcePhotoBytes:20*MiB});
+ const bytes=value=>new TextEncoder().encode(JSON.stringify(value)??'').length;
+ function inventory(data){
+  const sections={};for(const [label,keys]of Object.entries({records:['records','instruments','rfits','memos','actions','map','templates'],evidenceAndExchange:['outbox','inbox','exchange','decisionQueue','processed'],reports:['reportArchive','reportOutputs','emergencyIssues'],baseline:['baselineSnapshot']}))sections[label]=keys.reduce((n,k)=>n+bytes(data[k]??null),0);
+  let photos=0,photoBytes=0;const seen=new Set();function walk(v){if(!v||typeof v!=='object')return;if(typeof v.data==='string'&&v.data.startsWith('data:image/')){photos++;photoBytes+=bytes(v.data);seen.add(v.data);}for(const [k,x]of Object.entries(v))if(k!=='data')if(Array.isArray(x))x.forEach(walk);else if(x&&typeof x==='object')walk(x);}walk(data);
+  const size=bytes(data);return {bytes:size,sections,photoOccurrences:photos,photoBytes,uniquePhotos:seen.size,reports:(data.reportArchive||[]).length,emergencyIssues:(data.emergencyIssues||[]).length,level:size>=POLICY.workspaceBytes?'full':size>=POLICY.warningBytes?'warning':'normal'};
+ }
+ function assertGrowth(next,previous){const size=bytes(next);if(size>POLICY.workspaceBytes&&(!previous||size>bytes(previous)))throw Error('Workspace exceeds the 32 MiB operating budget. Export recovery data; stop adding photos or closing reports until a custodian plans an archive. Existing evidence is retained.');return size;}
+ function photoSource(file){if(!['image/jpeg','image/png','image/webp'].includes(file.type))throw Error('Choose JPEG, PNG or WebP photos.');if(file.size>POLICY.sourcePhotoBytes)throw Error('Choose a photograph smaller than 20 MiB.');}
+ function photoResult(data){if(bytes(data)>POLICY.photoBytes)throw Error('Compressed photo exceeds 2 MiB. Use a smaller image.');return data;}
+ async function verifyDataset(data){const W=root.GTWorkspace||(typeof require==='function'?require('./workspace.js'):null),P=root.GTPackages||(typeof require==='function'?require('./packages.js'):null),R=root.GTReporting||(typeof require==='function'?require('./reporting.js'):null);const next=W.migrate(data);for(const report of next.reportArchive||[])await R.verify(report);for(const issue of next.emergencyIssues||[]){if(await P.hash(issue.reference)!==issue.referenceHash)throw Error('Emergency reference fingerprint does not match.');W.validate(issue.reference);}return next;}
+ function updateBlockers({pending=false,fault=false,dirty=false,editor=false,otherTabs=false}={}){return [pending&&'Wait for local saves and package/report operations to finish.',fault&&'Resolve the storage error or export recovery data first.',dirty&&'Save local changes first.',editor&&'Save or close the open editor or package dialog.',otherTabs&&'Close other tracker tabs before applying an update.'].filter(Boolean);}
+ const api={POLICY,bytes,inventory,assertGrowth,photoSource,photoResult,verifyDataset,updateBlockers};if(typeof module==='object'&&module.exports)module.exports=api;else root.GTLifecycle=api;
+})(typeof window==='object'?window:globalThis);

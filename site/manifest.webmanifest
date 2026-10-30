@@ -1,0 +1,13 @@
+{
+  "name": "Project Tools · Ground Treatment Tracker",
+  "short_name": "GT Tracker",
+  "description": "Offline-first ground treatment progress tracker and briefing tool.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#edf0f2",
+  "theme_color": "#10303f",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

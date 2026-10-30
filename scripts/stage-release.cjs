@@ -1,0 +1,3 @@
+'use strict';
+const fs=require('node:fs/promises'),path=require('node:path'),{verify,root}=require('./verify-release.cjs');
+(async()=>{const manifest=await verify(),dest=path.join(root,'dist');await fs.mkdir(dest,{recursive:true});if((await fs.readdir(dest)).length)throw Error('dist must be empty; staging never merges an older release.');for(const entry of manifest.files.filter(f=>f.path.startsWith('site/'))){const target=path.join(dest,entry.path.slice(5));await fs.mkdir(path.dirname(target),{recursive:true});await fs.copyFile(path.join(root,entry.path),target);}console.log('Staged application-only Pages artifact.');})().catch(e=>{console.error(e.message);process.exitCode=1;});
